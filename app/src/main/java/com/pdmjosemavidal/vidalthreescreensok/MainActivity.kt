@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity() {
                             )
                         ) { backStackEntry ->
                             Screen3(
+                                navController = navController,
                                 sliderPosition = backStackEntry.arguments?.getFloat("sliderPosition") ?: 1f,
                                 attempts = backStackEntry.arguments?.getString("attempts") ?: "1"
                             )

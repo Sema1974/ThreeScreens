@@ -1,11 +1,18 @@
 package com.pdmjosemavidal.vidalthreescreensok
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation.Companion.keyboardOptions
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.pdmjosemavidal.vidalthreescreensok.model.Routes
@@ -29,16 +36,23 @@ fun Screen1(navController: NavController) {
         TextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Username") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+            placeholder = { Text (text = "Username") },
+
         )
+
         Spacer(modifier = Modifier.height(8.dp))
         TextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            //label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
+            placeholder = { Text (text = "Password") },
         )
         Spacer(modifier = Modifier.height(16.dp))
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
@@ -52,7 +66,7 @@ fun Screen1(navController: NavController) {
                 Text("LogIn")
             }
             Button(onClick = {
-                navController.navigate(Routes.Screen2.route)
+                navController.navigate(Routes.Screen2.createRoute("Guest"))
             }) {
                 Text("Guest")
             }
@@ -89,8 +103,11 @@ fun Screen2(navController: NavController, username: String) {
         TextField(
             value = attempts,
             onValueChange = { attempts = it },
-            label = { Text("Number of attempts") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            placeholder = { Text ( text = "Number of attempts") },
+
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
@@ -102,7 +119,7 @@ fun Screen2(navController: NavController, username: String) {
 }
 
 @Composable
-fun Screen3(sliderPosition: Float, attempts: String) {
+fun Screen3(navController: NavController, sliderPosition: Float, attempts: String) {
     val randomNumber = remember { Random.nextInt(1, 11) }
     var currentAttempt by remember { mutableStateOf(1) }
     var message by remember { mutableStateOf(" You have $attempts attempts to guess the number") }
@@ -151,5 +168,11 @@ fun Screen3(sliderPosition: Float, attempts: String) {
             Text("Try Again")
         }
         Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            navController.navigate(Routes.Screen1.route)
+        }
+        ){
+            Text("Go Back")
+        }
     }
 }
